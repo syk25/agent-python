@@ -14,12 +14,12 @@ if not api_key:
 client = genai.Client(api_key=api_key)
 model = "gemini-2.5-flash"
 
-# CLI에서 프롬프트로 주어진 인자 가져오기
+# parser 설정: CLI에서 사용자 프롬프트 받기, --verbose 플래그 추가 
 parser = argparse.ArgumentParser(description="Chatbot")
 parser.add_argument("user_prompt", type=str, help="User prompt")
+parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
 args = parser.parse_args()
 
-# 
 messages = [types.Content(role="user", parts=[types.Part(text=args.user_prompt)])]
 content = args.user_prompt
 response = client.models.generate_content(model=model, contents=messages)
