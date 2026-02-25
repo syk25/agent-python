@@ -23,7 +23,9 @@ args = parser.parse_args()
 messages = [types.Content(role="user", parts=[types.Part(text=args.user_prompt)])]
 content = args.user_prompt
 response = client.models.generate_content(model=model, contents=messages)
-print(f"User prompt: {content}")
-print(f"Prompt tokens: {response.usage_metadata.prompt_token_count}")
-print(f"Response tokens: {response.usage_metadata.candidates_token_count}")
+
+if args.verbose:
+    print(f"User prompt: {content}")
+    print(f"Prompt tokens: {response.usage_metadata.prompt_token_count}")
+    print(f"Response tokens: {response.usage_metadata.candidates_token_count}")
 print(f"Response:\n{response.text}")
