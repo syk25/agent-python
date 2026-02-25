@@ -32,7 +32,7 @@ def get_file_content(working_directory, file_path):
         return f"Error: {e}"
     
 
-schema_get_files_content = types.FunctionDeclaration(
+schema_get_file_content = types.FunctionDeclaration(
     name="get_file_content",
     description="Read file contents",
     parameters=types.Schema(
