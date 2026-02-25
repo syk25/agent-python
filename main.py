@@ -33,7 +33,6 @@ response = client.models.generate_content(
                                                 )
                                             )
 
-# print(f"response: {response.function_calls[0].name}, type:{type(response.function_calls[0].name)}")
 
 function_call_result = call_function(response.function_calls[0])
 
@@ -49,9 +48,6 @@ if not function_call_result.parts[0].function_response.response:
 
 if args.verbose:
     print(f"-> {function_call_result.parts[0].function_response.response['result']}")
-    # print(f"User prompt: {content}")
-    # print(f"Prompt tokens: {response.usage_metadata.prompt_token_count}")
-    # print(f"Response tokens: {response.usage_metadata.candidates_token_count}")
 
 if response.function_calls:
     for function_call in response.function_calls:
