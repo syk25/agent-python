@@ -23,34 +23,33 @@ parser.add_argument("--verbose", action="store_true", help="Enable verbose outpu
 args = parser.parse_args()
 
 messages = [types.Content(role="user", parts=[types.Part(text=args.user_prompt)])]
-content = args.user_prompt
-response = client.models.generate_content(
-                                            model=model, 
-                                            contents=messages, 
+
+for _ in range(20):
+    response = client.models.generate_content(
+                                            model=model,
+                                            contents=messages,
                                             config=types.GenerateContentConfig(
-                                                tools=[available_functions], 
+                                                tools=[available_functions],
                                                 system_instruction=system_prompt
                                                 )
                                             )
 
+    if response.candidates:
+        for candidate in response.candidates:
+            messages.append(candidate.content)
 
-function_call_result = call_function(response.function_calls[0])
+    if not response.function_calls:
+        print(f"Response:\n{response.text}")
+        exit(0)
+        
 
-if not function_call_result.parts:
-    raise Exception()
-
-if not function_call_result.parts[0].function_response:
-    raise Exception()
-
-if not function_call_result.parts[0].function_response.response:
-    raise Exception()
-
-
-if args.verbose:
-    print(f"-> {function_call_result.parts[0].function_response.response['result']}")
-
-if response.function_calls:
     for function_call in response.function_calls:
-        print(f"Calling function: {function_call.name}({function_call.args})")
-else:
-    print(f"Response:\n{response.text}")
+        function_call_result = call_function(function_call)
+        if args.verbose:
+            print(f"-> {function_call_result.parts[0].function_response.response['result']}")
+        else:
+            print(f" - Calling function: {function_call.name}")
+        messages.append(function_call_result)
+
+print(f"Iteration limit exceeded")
+exit(1)
