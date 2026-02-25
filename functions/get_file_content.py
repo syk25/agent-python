@@ -6,9 +6,7 @@ def get_file_content(working_directory, file_path):
     try:
         # 1. Setup and Validate Paths
         abs_working_dir = os.path.abspath(working_directory)
-        # print(f"abs_working_directory: {abs_working_dir}")
         abs_file_path = os.path.normpath(os.path.join(abs_working_dir, file_path))
-        # print(f"taget_file: {abs_file_path}")
 
         # Security check: Ensure target is inside working directory
         if os.path.commonpath([abs_working_dir, abs_file_path]) != abs_working_dir:
